@@ -74,6 +74,7 @@ By default start server callback listener on port 9877 and get auth tokens from 
 
 Returns:
 Promise object with refresh, access tokens and expired time from auth token file:  ``<home.dir>/.coursera/<client_name>_oauth2.csv``.
+
 ----
     getAccessToken(clientName).then(function (accessToken) {
         // do something with 'accessToken';
@@ -83,6 +84,7 @@ Promise object with refresh, access tokens and expired time from auth token file
 
 Returns:
 Promise object with access token from auth token file:  ``<home.dir>/.coursera/<client_name>_oauth2.csv``.
+
 ----
     getListOfClients().then(function (listOfClients) {
         // do something with 'listOfClients';
@@ -92,6 +94,7 @@ Promise object with access token from auth token file:  ``<home.dir>/.coursera/<
 
 Returns:
 Promise object with list of client configs from local file: ``<home.dir>/.coursera/coaconfig.csv``.
+
 ----
     getClient(clientNameOrId).then(function (clientConfig) {
         // do something with 'clientConfig';
