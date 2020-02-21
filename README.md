@@ -26,15 +26,19 @@ You can use module in different ways:
 - Open terminal, go to your project folder and download module from npm global repository via command '``npm install coaclient``' after you can use it in your project:
 
 
+
     var coaclientAPI = require('coaclient');
+    
     coaclientAPI().addClient(clientName, clientId, clientSecretKey, scope);
+    
     coaclientAPI().generateAuthTokens(clientName);
+    
     coaclientAPI().getAccessToken(clientName);
 
 The Coaclient tries to open the default system browser. The application configuration will be saved to the local file if the request is succeeded.
 You should check the data you've provided to the library during application configuration if you see any errors in the browser.
 
-If client was successfully added and configured, you will be able tosuccessfully get authentication tokens 
+If client was successfully added and configured, you will be able to successfully get authentication tokens 
 for Coursera API. Otherwise, an exception will be thrown telling you to set up your application for API access.
 
 Documentation
