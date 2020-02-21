@@ -19,12 +19,12 @@ Redirect URI to be http://localhost:9876/callback?client_id=<your_client_id>.
 Usage
 
 (Client-side module)
-    - Clone project, go to project folder and build module by run command "browserify coaclient.js -o bundlecoaclient.js", after that you can use it at client side.
+- Clone project, go to project folder and build module by run command "browserify coaclient.js -o bundlecoaclient.js", after that you can use it at client side.
 
 (Server-side module)
 You can use module in different ways:
-    - Clone project and build your own module by run command "npm install" in cloned project dir.
-    - Open terminal, go to your project folder and download module from npm global repository via command 'npm install coaclient' after you can use it in your project:
+- Clone project and build your own module by run command "npm install" in cloned project dir.
+- Open terminal, go to your project folder and download module from npm global repository via command 'npm install coaclient' after you can use it in your project:
 
 ::
     var coaclientAPI = require('coaclient'); //import coaclient module into your module
@@ -58,8 +58,9 @@ Parameters:
     clientSecret - Coursera Client Secret Key
     scope - by default used "view_profile", for business use "access_business_api".
 
+
 ::
-    deleteClient(String clientName);
+    deleteClient(clientName);
 
 Delete client config from file: ``<home.dir>/.coursera/coaconfig.csv``
 
@@ -100,9 +101,9 @@ Promise object with list of client configs from local file: ``<home.dir>/.course
 
 ::
     getClient(clientNameOrId).then(function (clientConfig) {
-        // do something with 'clientConfig';
+    // do something with 'clientConfig';
     }).catch(function (error) {
-        // do something if catch error;
+    // do something if catch error;
     });
 
 Returns:
