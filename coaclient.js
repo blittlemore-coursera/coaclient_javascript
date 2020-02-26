@@ -309,6 +309,12 @@ class CourseraOAuth2API {
     addClient(clientName, clientId, clientSecret, scope) {
         if (clientName === '' || clientId === '' || clientSecret === '') {
             console.log("Parameters can't be empty.");
+        } else if (scope !== '' &&
+            scope != SCOPE_VIEW_PROFILE &&
+            scope != SCOPE_VIEW_PROFILE + "," + SCOPE_ACCESS_BUSINESS &&
+            scope !== SCOPE_ACCESS_BUSINESS) {
+            console.log("Scope is invalid: " + scope + ". " +
+                "Available scopes are 'view_profile' or 'access_business_api'")
         } else {
             CourseraOAuth2API.prototype.getClient(clientName).then(function (clientConfig) {
                 console.log("Client with name: " + clientConfig.name + " already exist");
