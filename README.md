@@ -27,8 +27,11 @@ You can use module in different ways:
 
 
     var coaclientAPI = require('coaclient');
+
     coaclientAPI().addClient(clientName, clientId, clientSecretKey, scope);
+
     coaclientAPI().generateAuthTokens(clientName);
+    
     coaclientAPI().getAccessToken(clientName);
 
 The Coaclient tries to open the default system browser. The application configuration will be saved to the local file if the request is succeeded.
