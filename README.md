@@ -17,29 +17,24 @@ application, set the Redirect URI to be ``http://localhost:9876/callback?client_
 
 Usage
 ------
-(``Client-side module``)
-- Clone project, go to project folder and build module by run command '``browserify coaclient.js -o bundlecoaclient.js``', after that you can use it at client side.
+(``Client-side``)
+- Clone project, go to the project folder and build module by run command '``browserify coaclient.js -o bundlecoaclient.js``', after that you can use it at client side.
 
-(``Server-side module``)
+(``Server-side``)
 You can use module in different ways:
 - Clone project, add this module to your project, then run command 'npm install' to fetch all dependencies.
 - Open terminal, go to your project folder and download module from npm global repository via command '``npm install coaclient``' after you can use it in your project:
 
 
-
     var coaclientAPI = require('coaclient');
-    
     coaclientAPI().addClient(clientName, clientId, clientSecretKey, scope);
-    
     coaclientAPI().generateAuthTokens(clientName);
-    
     coaclientAPI().getAccessToken(clientName);
 
 The Coaclient tries to open the default system browser. The application configuration will be saved to the local file if the request is succeeded.
 You should check the data you've provided to the library during application configuration if you see any errors in the browser.
 
-If client was successfully added and configured, you will be able to successfully get authentication tokens 
-for Coursera API. Otherwise, an exception will be thrown telling you to set up your application for API access.
+If the client was successfully added and configured, you will be able to successfully get authentication tokens for Coursera API. Otherwise, an exception will be thrown telling you to set up your application for API access.
 
 Documentation
 -----
@@ -52,6 +47,7 @@ Methods:
     addClient(clientName, clientId, clientSecretKey, scope);
 
 Create a new client config and save it to the local config file: ``<home.dir>/.coursera/coaconfig.csv``
+
 Parameters:
 
     clientName - Client Name
@@ -67,7 +63,7 @@ Delete client config from file: ``<home.dir>/.coursera/coaconfig.csv``
 ----
     generateAuthTokens(clientName);
 
-By default start server callback listener on port 9877 and get auth tokens from Coursera OAuth API.
+By default start-server callback listener on port 9876 and get auth tokens from Coursera OAuth API.
 
 ----
     getAuthTokens(clientName).then(function (tokens) {
@@ -97,7 +93,7 @@ Promise object with access token from auth token file:  ``<home.dir>/.coursera/<
     });
 
 Returns:
-Promise object with list of client configs from local file: ``<home.dir>/.coursera/coaconfig.csv``.
+Promise object with a list of client configs from local file: ``<home.dir>/.coursera/coaconfig.csv``.
 
 ----
     getClient(clientNameOrId).then(function (clientConfig) {

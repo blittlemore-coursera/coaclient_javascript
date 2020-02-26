@@ -1,8 +1,12 @@
 {
   "name": "coaclient",
-  "version": "1.0.38",
+  "version": "1.0.40",
   "description": "Execute Node.js library for manage CourseraOAuth2 API tokens",
   "main": "coaclient.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.synergetica.net/AntonKryzhanovksyi/coaclient_node"
+  },
   "keywords": [
     "Authorization",
     "Coursera",

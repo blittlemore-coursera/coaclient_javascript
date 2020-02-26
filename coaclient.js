@@ -22,6 +22,7 @@ const COURSERA_CALLBACK_URI = "http://localhost:9876/callback?client_id=";
 const EXPIRES_IN = 1800000;
 const DEFAULT_PORT = 9876;
 const ENCODING_UTF8 = 'utf8';
+const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded';
 
 function sendAuthTokensRequest(clientId, courseraCode) {
     CourseraOAuth2API.prototype.getClient(clientId).then(function (config) {
@@ -34,7 +35,7 @@ function sendAuthTokensRequest(clientId, courseraCode) {
             'grant_type': AUTHORIZATION_CODE_VALUE
         };
         const headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': CONTENT_TYPE_FORM
         };
 
         request.post({ url: COURSERA_AUTH_TOKEN_URI, form: form, headers: headers }, function (e, r, body) {
@@ -125,7 +126,7 @@ function refreshAuthTokens(authTokens, clientName) {
             };
 
             const headers = {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': CONTENT_TYPE_FORM
             };
 
             request.post({ url: COURSERA_AUTH_TOKEN_URI, form: form, headers: headers }, function (e, r, body) {
@@ -139,10 +140,20 @@ function refreshAuthTokens(authTokens, clientName) {
     });
 }
 
+/**
+ * Service for managing Coursera OAuth2 API tokens
+ *
+ * @author Viktor Yurlov
+ */
 class CourseraOAuth2API {
 
+    /**
+     * Delete client config by client name from local cache config file
+     *
+     * @param clientName Name of client
+     */
     deleteClient(clientName) {
-        CourseraOAuth2API.prototype.getClient(clientName).then( function (result) {
+        CourseraOAuth2API.prototype.getClient(clientName).then(function (result) {
             CourseraOAuth2API.prototype.getListOfClients().then(function (clients) {
                 const arr = clients.filter(client => {
                     return  client.name !== clientName;
@@ -174,6 +185,13 @@ class CourseraOAuth2API {
         })
     };
 
+    /**
+     * Get access token by client name from local cache token file.
+     * If lifetime of access token is expired then it will refresh and save new tokens.
+     *
+     * @param clientName Name of client
+     * @returns {Promise<any>} Access token
+     */
     getAccessToken(clientName) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + clientName + AUTH_FILE_SUFFIX, ENCODING_UTF8);
@@ -197,6 +215,12 @@ class CourseraOAuth2API {
         });
     };
 
+    /**
+     * Get refresh, access tokens and expired time by client name from local cache token file
+     *
+     * @param clientName Name of client
+     * @returns {Promise<any>} Refresh, access tokens and expired_in time
+     */
     getAuthTokens(clientName) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + clientName + AUTH_FILE_SUFFIX, ENCODING_UTF8);
@@ -214,6 +238,13 @@ class CourseraOAuth2API {
         })
     };
 
+    /**
+     * Get client config with full information by client name
+     * or clientId from local cache config file.
+     *
+     * @param clientIdentifier Name of client or client ID
+     * @returns {Promise<any>} Client config object
+     */
     getClient(clientIdentifier) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + CONFIG_FILE_NAME, ENCODING_UTF8);
@@ -238,6 +269,11 @@ class CourseraOAuth2API {
         })
     };
 
+    /**
+     * Get list of client config from local cache config dir.
+     *
+     * @returns {Promise<any>} List of client config ojects
+     */
     getListOfClients() {
         return new Promise(function (resolve, reject) {
             let listOfClientConfig = [];
@@ -262,14 +298,31 @@ class CourseraOAuth2API {
         });
     };
 
+    /**
+     * Add client config to local cache config file
+     *  
+     * @param clientName Name of client
+     * @param clientId Client ID
+     * @param clientSecret Client Secret Key
+     * @param scope Scope of access (by default used 'view_profile')
+     */
     addClient(clientName, clientId, clientSecret, scope) {
-        CourseraOAuth2API.prototype.getClient(clientName).then(function (clientConfig) {
-            console.log("Client with name: " + clientConfig.name + " already exist");
-        }).catch(function (error) {
-            saveClientToCSVFile(clientName, clientId, clientSecret, scope);
-        })
+        if (clientName === '' || clientId === '' || clientSecret === '') {
+            console.log("Parameters can't be empty.");
+        } else {
+            CourseraOAuth2API.prototype.getClient(clientName).then(function (clientConfig) {
+                console.log("Client with name: " + clientConfig.name + " already exist");
+            }).catch(function (error) {
+                saveClientToCSVFile(clientName, clientId, clientSecret, scope);
+            });
+        }
     };
 
+    /**
+     * Start server callback listener, generate new tokens and save them to local cache token file.
+     * 
+     * @param clientName Name of client
+     */
     generateAuthTokens(clientName) {
         this.getClient(clientName).then(function (clientConfig) {
             const courseraCodeURI = util.format(
