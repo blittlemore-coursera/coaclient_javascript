@@ -25,13 +25,10 @@ You can use module in different ways:
 - Clone project, add this module to your project, then run command 'npm install' to fetch all dependencies.
 - Open terminal, go to your project folder and download module from npm global repository via command '``npm install coaclient``' after you can use it in your project:
 
-
+-----
     var coaclientAPI = require('coaclient');
-
     coaclientAPI().addClient(clientName, clientId, clientSecretKey, scope);
-
     coaclientAPI().generateAuthTokens(clientName);
-    
     coaclientAPI().getAccessToken(clientName);
 
 The Coaclient tries to open the default system browser. The application configuration will be saved to the local file if the request is succeeded.
