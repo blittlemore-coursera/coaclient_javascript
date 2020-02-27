@@ -27,7 +27,7 @@ You can use module in different ways:
 
 -----
     var coaclientAPI = require('coaclient');
-    coaclientAPI().addClient(clientName, clientId, clientSecretKey, scope);
+    coaclientAPI().addClientConfig(clientName, clientId, clientSecretKey, scope);
     coaclientAPI().generateAuthTokens(clientName);
     coaclientAPI().getAccessToken(clientName);
 
@@ -44,7 +44,7 @@ Documentation
 Methods:
 
 ----
-    addClient(clientName, clientId, clientSecretKey, scope);
+    addClientConfig(clientName, clientId, clientSecretKey, scope);
 
 Create a new client config and save it to the local config file: ``<home.dir>/.coursera/coaconfig.csv``
 
@@ -56,7 +56,7 @@ Parameters:
     scope - by default used "view_profile", for business use "access_business_api".
 ----
 
-    deleteClient(clientName);
+    deleteClientConfig(clientName);
 
 Delete client config from file: ``<home.dir>/.coursera/coaconfig.csv``
 
@@ -86,7 +86,7 @@ Returns:
 Promise object with access token from auth token file:  ``<home.dir>/.coursera/<client_name>_oauth2.csv``.
 
 ----
-    getListOfClients().then(function (listOfClients) {
+    getClientConfigs.then(function (listOfClientConfigs) {
         // do something with 'listOfClients';
     }).catch(function (error) {
         // do something if catch error;
@@ -96,7 +96,7 @@ Returns:
 Promise object with a list of client configs from local file: ``<home.dir>/.coursera/coaconfig.csv``.
 
 ----
-    getClient(clientNameOrId).then(function (clientConfig) {
+    getClientConfig(clientNameOrId).then(function (clientConfig) {
         // do something with 'clientConfig';
     }).catch(function (error) {
         // do something if catch error;

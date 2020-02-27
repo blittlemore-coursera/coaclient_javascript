@@ -25,7 +25,7 @@ const ENCODING_UTF8 = 'utf8';
 const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded';
 
 function sendAuthTokensRequest(clientId, courseraCode) {
-    CourseraOAuth2API.prototype.getClient(clientId).then(function (config) {
+    CourseraOAuth2API.prototype.getClientConfig(clientId).then(function (config) {
         const form = {
             'client_id': config.clientId,
             'client_secret': config.secretKey,
@@ -116,7 +116,7 @@ function refreshAuthTokens(authTokens, clientName) {
     return new Promise(function (resolve, reject) {
         console.log("Looking client: " + clientName);
 
-        CourseraOAuth2API.prototype.getClient(clientName).then(function (config) {
+        CourseraOAuth2API.prototype.getClientConfig(clientName).then(function (config) {
             console.log("Found client");
             const form = {
                 'client_id': config.clientId,
@@ -135,6 +135,7 @@ function refreshAuthTokens(authTokens, clientName) {
                 resolve(params.access_token);
             });
         }).catch(function (error) {
+            reject(error);
             console.log(error);
         });
     });
@@ -152,9 +153,9 @@ class CourseraOAuth2API {
      *
      * @param clientName Name of client
      */
-    deleteClient(clientName) {
-        CourseraOAuth2API.prototype.getClient(clientName).then(function (result) {
-            CourseraOAuth2API.prototype.getListOfClients().then(function (clients) {
+    deleteClientConfig(clientName) {
+        CourseraOAuth2API.prototype.getClientConfig(clientName).then(function (result) {
+            CourseraOAuth2API.prototype.getClientConfigs().then(function (clients) {
                 const arr = clients.filter(client => {
                     return  client.name !== clientName;
                 });
@@ -245,7 +246,7 @@ class CourseraOAuth2API {
      * @param clientIdentifier Name of client or client ID
      * @returns {Promise<any>} Client config object
      */
-    getClient(clientIdentifier) {
+    getClientConfig(clientIdentifier) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + CONFIG_FILE_NAME, ENCODING_UTF8);
             inputStream
@@ -274,7 +275,7 @@ class CourseraOAuth2API {
      *
      * @returns {Promise<any>} List of client config ojects
      */
-    getListOfClients() {
+    getClientConfigs() {
         return new Promise(function (resolve, reject) {
             let listOfClientConfig = [];
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + CONFIG_FILE_NAME, ENCODING_UTF8);
@@ -306,17 +307,17 @@ class CourseraOAuth2API {
      * @param clientSecret Client Secret Key
      * @param scope Scope of access (by default used 'view_profile')
      */
-    addClient(clientName, clientId, clientSecret, scope) {
+    addClientConfig(clientName, clientId, clientSecret, scope) {
         if (clientName === '' || clientId === '' || clientSecret === '') {
             console.log("Parameters can't be empty.");
         } else if (scope !== '' &&
-            scope != SCOPE_VIEW_PROFILE &&
-            scope != SCOPE_VIEW_PROFILE + "," + SCOPE_ACCESS_BUSINESS &&
+            scope !== SCOPE_VIEW_PROFILE &&
+            scope !== SCOPE_VIEW_PROFILE + "," + SCOPE_ACCESS_BUSINESS &&
             scope !== SCOPE_ACCESS_BUSINESS) {
             console.log("Scope is invalid: " + scope + ". " +
                 "Available scopes are 'view_profile' or 'access_business_api'")
         } else {
-            CourseraOAuth2API.prototype.getClient(clientName).then(function (clientConfig) {
+            CourseraOAuth2API.prototype.getClientConfig(clientName).then(function (clientConfig) {
                 console.log("Client with name: " + clientConfig.name + " already exist");
             }).catch(function (error) {
                 saveClientToCSVFile(clientName, clientId, clientSecret, scope);
@@ -330,7 +331,7 @@ class CourseraOAuth2API {
      * @param clientName Name of client
      */
     generateAuthTokens(clientName) {
-        this.getClient(clientName).then(function (clientConfig) {
+        this.getClientConfig(clientName).then(function (clientConfig) {
             const courseraCodeURI = util.format(
                 COURSERA_CODE_URI,
                 clientConfig.scope,
