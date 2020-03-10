@@ -1,6 +1,6 @@
 {
   "name": "coaclient",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "Execute Node.js library for manage CourseraOAuth2 API tokens",
   "main": "coaclient.js",
   "repository": {

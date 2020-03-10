@@ -24,14 +24,15 @@ const DEFAULT_PORT = 9876;
 const ENCODING_UTF8 = 'utf8';
 const CONTENT_TYPE_FORM = 'application/x-www-form-urlencoded';
 
-class CoaclientAPI {
+var CoaclientAPI = {
+
     /**
      * Get refresh, access tokens and expired time by client name from local cache token file
      *
      * @param clientName Name of client
      * @returns {Promise<any>} Refresh, access tokens and expired_in time
      */
-    static getAuthTokens(clientName) {
+    getAuthTokens(clientName) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + clientName + AUTH_FILE_SUFFIX, ENCODING_UTF8);
             inputStream
@@ -46,7 +47,7 @@ class CoaclientAPI {
                 reject("Error reading config file: " + err);
             });
         })
-    };
+    },
 
     /**
      * Get access token by client name from local cache token file.
@@ -55,7 +56,7 @@ class CoaclientAPI {
      * @param clientName Name of client
      * @returns {Promise<any>} Access token
      */
-    static getAccessToken(clientName) {
+    getAccessToken(clientName) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + clientName + AUTH_FILE_SUFFIX, ENCODING_UTF8);
             inputStream
@@ -77,7 +78,7 @@ class CoaclientAPI {
                 reject("Error reading auth tokens file, try to generate new one: " + err);
             });
         });
-    };
+    },
 
     /**
      * Get client config with full information by client name
@@ -86,7 +87,7 @@ class CoaclientAPI {
      * @param clientIdentifier Name of client or client ID
      * @returns {Promise<any>} Client config object
      */
-    static getClientConfig(clientIdentifier) {
+    getClientConfig(clientIdentifier) {
         return new Promise(function (resolve, reject) {
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + CONFIG_FILE_NAME, ENCODING_UTF8);
             inputStream
@@ -108,14 +109,14 @@ class CoaclientAPI {
                 reject("Error reading config file: " + err);
             });
         })
-    };
+    },
 
     /**
      * Get list of client config from local cache config dir.
      *
      * @returns {Promise<any>} List of client config ojects
      */
-    static getClientConfigs() {
+    getClientConfigs() {
         return new Promise(function (resolve, reject) {
             let listOfClientConfig = [];
             let inputStream = fs.createReadStream(CACHE_DIR_PATH + CONFIG_FILE_NAME, ENCODING_UTF8);
@@ -137,7 +138,7 @@ class CoaclientAPI {
                 reject("Error reading config file: " + err);
             });
         });
-    };
+    },
 
     /**
      * Add client config to local cache config file
@@ -147,7 +148,7 @@ class CoaclientAPI {
      * @param clientSecret Client Secret Key
      * @param scope Scope of access (by default used 'view_profile')
      */
-    static addClientConfig(clientName, clientId, clientSecret, scope) {
+    addClientConfig(clientName, clientId, clientSecret, scope) {
         var self = this;
         if (clientName === '' || clientId === '' || clientSecret === '') {
             console.log("Parameters can't be empty.");
@@ -168,14 +169,14 @@ class CoaclientAPI {
                 });
             });
         }
-    };
+    },
 
     /**
      * Start server callback listener, generate new tokens and save them to local cache token file.
      *
      * @param clientName Name of client
      */
-    static generateAuthTokens(clientName) {
+    generateAuthTokens(clientName) {
         var self = this;
         self.getClientConfig(clientName).then(function (clientConfig) {
             const courseraCodeURI = util.format(
@@ -190,14 +191,14 @@ class CoaclientAPI {
         }).catch(function (error) {
             console.log(error);
         });
-    };
+    },
 
     /**
      * Delete client config by client name from local cache config file
      *
      * @param clientName Name of client
      */
-    static deleteClientConfig(clientName) {
+    deleteClientConfig(clientName) {
         var self = this;
         self.getClientConfig(clientName).then(function (result) {
             self.getClientConfigs().then(function (clients) {
@@ -229,7 +230,7 @@ class CoaclientAPI {
         }).catch(function (error) {
             console.log(error);
         })
-    };
+    }
 }
 
 function sendAuthTokensRequest(clientId, courseraCode) {
