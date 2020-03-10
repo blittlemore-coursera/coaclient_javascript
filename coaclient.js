@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 const csvWriter = require('csv-write-stream');
 const csvParser = require('csv-parser');
 const os = require('os');
