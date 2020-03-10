@@ -27,14 +27,11 @@ You can use module in different ways:
 
 -----
     // import module
-    const Coaclient = require('coaclient');
-    
-    // init it like a normal object
-    const coaclientAPI = new Coaclient();
-    
-    coaclientAPI.addClientConfig(clientName, clientId, clientSecretKey, scope);
-    coaclientAPI.generateAuthTokens(clientName);
-    coaclientAPI.getAccessToken(clientName).then(function (tokens) {
+    var Coaclient = require('coaclient');
+    // use static methods
+    Coaclient.addClientConfig(clientName, clientId, clientSecretKey, scope);
+    Coaclient.generateAuthTokens(clientName);
+    Coaclient.getAccessToken(clientName).then(function (tokens) {
        // do something with 'tokens';
     }).catch(function (error) {
        // do something if catch error;
